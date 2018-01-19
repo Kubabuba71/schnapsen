@@ -27,7 +27,7 @@ class Bot:
 
         return move
 
-    def value(self, state, depth = 0):
+    def value(self, state, depth=0):
         # type: (State, int) -> tuple[float, tuple[int, int]]
         """
         Return the value of this state and the associated move
@@ -53,11 +53,9 @@ class Bot:
 
         for move in moves:
 
-            next_state = state.next(move)
-
             # IMPLEMENT: Add a recursive function call so that 'value' will contain the
             # minimax value of 'next_state'
-            value ???
+            value, m = self.value(state.next(move), depth+1)
 
             if maximizing(state):
                 if value > best_value:
