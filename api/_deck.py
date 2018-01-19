@@ -280,6 +280,8 @@ class Deck:
 			perspective[unknowns.pop()] = "S"
 
 		deck = Deck(perspective, stock, list(self.__p1_perspective), list(self.__p2_perspective))
+		deck.__trick = list(self.__trick)
+
 		deck.__signature = None
 
 		return deck
@@ -288,7 +290,7 @@ class Deck:
 		deck = Deck(list(self.__card_state), list(self.__stock), list(self.__p1_perspective), list(self.__p2_perspective), self.__trump_suit)
 		
 		deck.__signature = signature if self.__signature is None else self.__signature
-		deck.__trick = self.__trick
+		deck.__trick = list(self.__trick)
 
 		return deck
 
