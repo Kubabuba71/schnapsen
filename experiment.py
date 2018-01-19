@@ -41,7 +41,7 @@ class Bot:
 
         #IMPLEMENT: Make a random move (but exclude the best non-trump move from above)
         chosen_move = random.choice(moves)
-        while chosen_move[0] is None or best_non_trump_move[0] is None or chosen_move[0] == best_non_trump_move[0]:
+        if chosen_move[0] is None or best_non_trump_move[0] is None or chosen_move[0] == best_non_trump_move[0]:
             chosen_move = random.choice(moves)
         print(chosen_move)
         return chosen_move
