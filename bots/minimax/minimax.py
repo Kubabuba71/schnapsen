@@ -12,7 +12,7 @@ class Bot:
     __max_depth = -1
     __randomize = True
 
-    def __init__(self, randomize=True, depth=10):
+    def __init__(self, randomize=True, depth=6):
         """
         :param randomize: Whether to select randomly from moves of equal value (or to select the first always)
         :param depth:
