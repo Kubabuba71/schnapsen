@@ -13,15 +13,22 @@ class Bot:
     __randomize = True
 
     def __init__(self, randomize=True, depth=8):
+        """
+        :param randomize: Whether to select randomly from moves of equal value (or to select the first always)
+        :param depth:
+        """
         self.__randomize = randomize
         self.__max_depth = depth
 
     def get_move(self, state):
-        val, move = self.value(state)
+        # type: (State) -> tuple[int, int]
+        player = state.whose_turn()
+
+        val, move = self.value(state, player=player)
 
         return move
 
-    def value(self, state, alpha=float('-inf'), beta=float('inf'), depth = 0):
+    def value(self, state, alpha=float('-inf'), beta=float('inf'), depth = 0, player = -1):
         """
         Return the value of this state and the associated move
         :param State state:
@@ -36,7 +43,7 @@ class Bot:
             return (points, None) if winner == 1 else (-points, None)
 
         if depth == self.__max_depth:
-            return heuristic(state)
+            return heuristic(state, player)
 
         best_value = float('-inf') if maximizing(state) else float('inf')
         best_move = None
@@ -48,8 +55,7 @@ class Bot:
 
         for move in moves:
 
-            next_state = state.next(move)
-            value, _ = ???
+            value, _ = self.value(state.next(move), alpha, beta, depth+1, player)
 
             if maximizing(state):
                 if value > best_value:
@@ -64,7 +70,7 @@ class Bot:
 
             # Prune the search tree
             # We know this state will never be chosen, so we stop evaluating its children
-            if ???:
+            if beta < alpha:
                 break
 
         return best_value, best_move
@@ -79,12 +85,14 @@ def maximizing(state):
     """
     return state.whose_turn() == 1
 
-def heuristic(state):
-    # type: (State) -> float
-    """
-    Estimate the value of this state: -1.0 is a certain win for player 2, 1.0 is a certain win for player 1
+# def heuristic(state):
+#     return state.get_points(state.whose_turn()) / 66, None
 
-    :param state:
-    :return: A heuristic evaluation for the given state (between -1.0 and 1.0)
-    """
-    return util.ratio_points(state, 1) * 2.0 - 1.0, None
+# def heuristic(state):
+#     """
+#     Original Heuristic
+#     """
+#     return util.ratio_points(state, 1) * 2.0 - 1.0, None
+
+def heuristic(state, player):
+    return state.get_points(player) / 66, None

@@ -12,7 +12,7 @@ class Bot:
     __max_depth = -1
     __randomize = True
 
-    def __init__(self, randomize=True, depth=6):
+    def __init__(self, randomize=True, depth=8):
         """
         :param randomize: Whether to select randomly from moves of equal value (or to select the first always)
         :param depth:
@@ -22,18 +22,20 @@ class Bot:
 
     def get_move(self, state):
         # type: (State) -> tuple[int, int]
+        player = state.whose_turn()
 
-        val, move = self.value(state)
+        val, move = self.value(state, player=player)
 
         return move
 
-    def value(self, state, depth=0):
-        # type: (State, int) -> tuple[float, tuple[int, int]]
+    def value(self, state, alpha=float('-inf'), beta=float('inf'), depth = 0, player=-1):
         """
         Return the value of this state and the associated move
-        :param state:
-        :param depth:
-        :return: A tuple containing the value of this state, and the best move for the player currently to move
+        :param State state:
+        :param float alpha: The highest score that the maximizing player can guarantee given current knowledge
+        :param float beta: The lowest score that the minimizing player can guarantee given current knowledge
+        :param int depth: How deep we are in the tree
+        :return val, move: the value of the state, and the best move.
         """
 
         if state.finished():
@@ -43,28 +45,33 @@ class Bot:
         if depth == self.__max_depth:
             return heuristic(state)
 
+        best_value = float('-inf') if maximizing(state) else float('inf')
+        best_move = None
+
         moves = state.moves()
 
         if self.__randomize:
             random.shuffle(moves)
 
-        best_value = float('-inf') if maximizing(state) else float('inf')
-        best_move = None
-
         for move in moves:
 
-            # IMPLEMENT: Add a recursive function call so that 'value' will contain the
-            # minimax value of 'next_state'
-            value, _ = self.value(state.next(move), depth+1)
+            value, _ = self.value(state.next(move), alpha, beta, depth+1, player)
 
             if maximizing(state):
                 if value > best_value:
                     best_value = value
                     best_move = move
+                    alpha = best_value
             else:
                 if value < best_value:
                     best_value = value
                     best_move = move
+                    beta = best_value
+
+            # Prune the search tree
+            # We know this state will never be chosen, so we stop evaluating its children
+            if beta < alpha:
+                break
 
         return best_value, best_move
 
