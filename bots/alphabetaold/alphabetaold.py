@@ -28,7 +28,7 @@ class Bot:
 
         return move
 
-    def value(self, state, alpha=float('-inf'), beta=float('inf'), depth = 0, player=-1):
+    def value(self, state, alpha=float('-inf'), beta=float('inf'), depth = 0, player = -1):
         """
         Return the value of this state and the associated move
         :param State state:
