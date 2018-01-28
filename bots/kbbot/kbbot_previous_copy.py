@@ -58,10 +58,10 @@ class Bot:
         # This creates the string which is used to make the strategy_variable.
         # Note that as far as kb.py is concerned, two objects created with the same
         # string in the constructor are equivalent, and are seen as the same symbol.
-        # Here we use "pc" to indicate that the card with index "index" should be played with the
-        # PlayCheap heuristics that was defined in class. Initialise a different variable if 
+        # Here we use "pj" to indicate that the card with index "index" should be played with the
+        # PlayJack heuristics that was defined in class. Initialise a different variable if 
         # you want to apply a different strategy (that you will have to define in load.py)
-        variable_string = "pc" + str(index)
+        variable_string = "pj" + str(index)
         strategy_variable = Boolean(variable_string)
 
         # Add the relevant clause to the loaded knowledge base
